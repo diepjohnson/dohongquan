@@ -1,39 +1,53 @@
 package com.example.activitytracker;
 
-import android.annotation.TargetApi;
-import android.os.Build;
+import marterial.activities.ViewPagerWithTabsActivity;
+import marterial.handlers.ActionBarDefaultHandler;
+import marterial.handlers.ActionBarHandler;
+import marterial.handlers.ViewPagerHandler;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ViewPagerWithTabsActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			setTranslucentStatus(true);
-		}
-
-		SystemBarTintManager tintManager = new SystemBarTintManager(this);
-		tintManager.setStatusBarTintEnabled(true);
-		tintManager.setNavigationBarTintEnabled(true);
-		tintManager.setStatusBarTintResource(R.color.statusbar_bg);
 	}
-	@TargetApi(19) 
-	private void setTranslucentStatus(boolean on) {
-		Window win = getWindow();
-		WindowManager.LayoutParams winParams = win.getAttributes();
-		final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-		if (on) {
-			winParams.flags |= bits;
-		} else {
-			winParams.flags &= ~bits;
-		}
-		win.setAttributes(winParams);
+
+
+	@Override
+	public ViewPagerHandler getViewPagerHandler() {
+		return new ViewPagerHandler(MainActivity.this)
+				.addPage(
+						"Section1",
+						MainFragment
+								.newInstance("Material Design ViewPager with Expanded Tabs"))
+				.addPage(
+						"Section2",
+						MainFragment
+								.newInstance("Material Design ViewPager with Expanded Tabs"))
+				.addPage(
+						"Section3",
+						MainFragment
+								.newInstance("Material Design ViewPager with Expanded Tabs"));
+	}
+
+	@Override
+	public int defaultViewPagerPageSelectedPosition() {
+		return 0;
+	}
+
+	@Override
+	protected boolean expandTabs() {
+		return true;
+	}
+
+	@Override
+	protected boolean enableActionBarShadow() {
+		return false;
+	}
+
+	@Override
+	protected ActionBarHandler getActionBarHandler() {
+		return new ActionBarDefaultHandler(this);
 	}
 }
